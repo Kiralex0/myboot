@@ -5,6 +5,8 @@ import com.example.MyBot.model.Goal;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 
 @AllArgsConstructor
 @Service
@@ -21,6 +23,10 @@ public class GoalServiceImpl {
             return goalRepo.save(goal).getId();
 //        }
 //        return null;
+    }
+
+    public List<Goal> getAllGoals(){
+        return goalRepo.findAll();
     }
 
     public Goal updateGoal(Goal goal){

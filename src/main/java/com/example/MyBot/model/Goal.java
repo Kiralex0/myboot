@@ -19,18 +19,23 @@ public class Goal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)// анотация указывает на то что даноое поле заполняется бд
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
-    private String description;
 
-    @ManyToMany()
-    //анотация описывает табличку, которая будет объединять таблички goal and user
-    @JoinTable(name = "user_to_goal", joinColumns = @JoinColumn(name = "goal_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private Set<User> users;
+//    @ManyToMany()
+//    //анотация описывает табличку, которая будет объединять таблички goal and user
+//    @JoinTable(name = "user_to_goal", joinColumns = @JoinColumn(name = "goal_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
+//    private Set<User> users;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private User user;
+
+//    @Column(name = "user_id")
+//    private Long userId;
 
     //анотация указывает на поле, которое нужно записать в бд, но так как енам нельзя записать в бд она конвертирует его в строчку
     @Enumerated(value = EnumType.STRING)

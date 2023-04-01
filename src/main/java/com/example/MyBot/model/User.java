@@ -30,9 +30,12 @@ public class User {
     @Column(name = "level_user")
     private int levelUser;
 
-    //это анотация говорит о том, что к одному юзеру ммогут относится многие цели
-    @ManyToMany()
-    @JoinTable(name = "user_to_goal", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "goal_id"))
+//    //это анотация говорит о том, что к одному юзеру ммогут относится многие цели
+//    @ManyToMany()
+//    @JoinTable(name = "user_to_goal", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "goal_id"))
+//    private Set<Goal> goals;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Goal> goals;
 
 }

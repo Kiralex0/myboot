@@ -3,6 +3,7 @@ package com.example.MyBot;
 import com.example.MyBot.controller.GoalControllerImpl;
 import com.example.MyBot.controller.UserControllerImpl;
 import com.example.MyBot.model.Goal;
+import com.example.MyBot.model.StatusGoal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -59,7 +60,7 @@ public class BotUi extends TelegramLongPollingBot {
     }
 
 
-    private void sandMessage(String message, Long chatId) {
+    private void sendMessage(String message, Long chatId) {
         SendMessage sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText(message);
@@ -90,27 +91,33 @@ public class BotUi extends TelegramLongPollingBot {
             String text = update.getMessage().getText();
             Long id = update.getMessage().getChatId();
             String name = update.getMessage().getChat().getFirstName();
-            Goal goal = new Goal();
-            goal.setTitle("Купить поросенка");
-            goal.setDescription("Продать поросенка");
-            goal.setId(5L);
-
+//          отправка двойной команды
+            if (text.contains("/setgoal")) {
+                String goalTitle = text.substring(text.indexOf(" "));
+                goalController.createGoal(buildGoal(goalTitle, id));
+            }
 
 
 
             switch (text) {
                 case "/start" :
-                    sandMessage(userController.startCommand(update.getMessage()), id);
+                    sendMessage(userController.startCommand(update.getMessage()), id);
                     break;
 
                 case "/done" :
                     break;
 
                 case "/setgoal":
-                    sandMessage("Напиши цель", goalController.createGoal(goal));
+
                    break;
             }
         }
 
+    }
+    private Goal buildGoal(String goalTitle, Long userId){
+        Goal goal = new Goal();
+        goal.setTitle(goalTitle);
+        goal.setStatus(StatusGoal.ACTIVE);
+        return goal;
     }
 }
