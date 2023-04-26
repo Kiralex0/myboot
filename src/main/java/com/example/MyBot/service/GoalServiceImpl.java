@@ -19,10 +19,7 @@ public class GoalServiceImpl {
     }
 
     public Long createGoal(Goal goal){
-//        if (goalRepo.findById(goal.getId()).isEmpty()){
             return goalRepo.save(goal).getId();
-//        }
-//        return null;
     }
 
     public List<Goal> getAllGoals(){
@@ -31,5 +28,11 @@ public class GoalServiceImpl {
 
     public Goal updateGoal(Goal goal){
         return null;
+    }
+
+    public void completeDone(Long id){
+        Goal goal = goalRepo.findById(id).get();
+        goal.done();
+        goalRepo.save(goal);
     }
 }

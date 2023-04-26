@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Set;
 
 @Data
@@ -30,12 +31,28 @@ public class User {
     @Column(name = "level_user")
     private int levelUser;
 
-//    //это анотация говорит о том, что к одному юзеру ммогут относится многие цели
-//    @ManyToMany()
-//    @JoinTable(name = "user_to_goal", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "goal_id"))
-//    private Set<Goal> goals;
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_goals", joinColumns = @JoinColumn(name = "users_id"), inverseJoinColumns = @JoinColumn(name = "goals_id"))
+    private List<Goal> goals;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Set<Goal> goals;
+    public void addGoal(Goal goal){
+        this.goals.add(goal);
+    }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", surname='" + surname + '\'' +
+                ", userName='" + userName + '\'' +
+                ", registerData=" + registerData +
+                ", levelUser=" + levelUser +
+                '}';
+    }
+
+    public int levelUp(){
+        this.levelUser++;
+        return levelUser;
+    }
 }

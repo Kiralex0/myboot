@@ -8,7 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
+
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -25,17 +26,10 @@ public class Goal {
     @Column(name = "title")
     private String title;
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "users_goals", joinColumns = @JoinColumn(name = "goals_id"), inverseJoinColumns = @JoinColumn(name = "users_id"))
+    private List<User> users;
 
-//    @ManyToMany()
-//    //анотация описывает табличку, которая будет объединять таблички goal and user
-//    @JoinTable(name = "user_to_goal", joinColumns = @JoinColumn(name = "goal_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
-//    private Set<User> users;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
-
-//    @Column(name = "user_id")
-//    private Long userId;
 
     //анотация указывает на поле, которое нужно записать в бд, но так как енам нельзя записать в бд она конвертирует его в строчку
     @Enumerated(value = EnumType.STRING)
@@ -45,4 +39,13 @@ public class Goal {
     @Column(name = "create_data")
     @CreationTimestamp // анотация дает понять фреймворку, что в это поле нужно записать дату создания объекта
     private LocalDateTime createDate;
+
+    @Override
+    public String toString() {
+        return id + " " + title + " " + status + " " + createDate;
+    }
+
+    public void done(){
+        this.status = StatusGoal.DONE;
+    }
 }

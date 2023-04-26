@@ -32,7 +32,7 @@ public class UserServiceImpl {
     }
 
     private void registerUser(Message message) {
-        if (userRepo.findById(message.getChatId()).isEmpty()) {
+        if ((userRepo.findById(message.getChatId())).isEmpty()) {
             Long id = message.getChatId();
             Chat chat = message.getChat();
             User user = new User();
@@ -45,16 +45,22 @@ public class UserServiceImpl {
         }
     }
 
-    public Long createUser(User user){
+    public Long createUser(User user) {
         return userRepo.save(user).getId();
     }
 
-    public User updateUser(User user){
+    public User updateUser(User user) {
         return null;
     }
 
-    public User getUser(Long id){
-        return null;
+    public User getUser(Long id) {
+        return userRepo.findById(id).get();
     }
 
+    public int levelUp(Long id){
+        User user = userRepo.findById(id).get();
+        int level = user.levelUp();
+        userRepo.save(user);
+        return level;
+    }
 }
